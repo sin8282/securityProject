@@ -16,6 +16,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -24,18 +26,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthenticationDetailsSource authenticationDetailsSource;
+    @Autowired
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
     @Bean
     public PasswordEncoder passwordEncoder(){
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
-    }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         return new CustomAuthenticationProvider();
+    }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
     }
 
     @Override
@@ -48,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers("/","/users","/user/login/**").permitAll()
+                .antMatchers("/", "/users", "/user/login/**", "/login*").permitAll()
                 .antMatchers("/mypage").hasRole("USER")
                 .antMatchers("/messages").hasRole("MANAGER")
                 .antMatchers("/config").hasRole("ADMIN")
@@ -58,8 +63,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login_proc")
-                .authenticationDetailsSource(authenticationDetailsSource)
                 .defaultSuccessUrl("/")
+                .authenticationDetailsSource(authenticationDetailsSource)
+                .successHandler(authenticationSuccessHandler)
+                .failureHandler(authenticationFailureHandler)
                 .permitAll()
                 ;
     }
