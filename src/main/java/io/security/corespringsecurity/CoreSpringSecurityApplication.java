@@ -24,6 +24,9 @@ public class CoreSpringSecurityApplication {
         jdbcTemplate.execute("INSERT INTO account (age, email, password, role, username, id) VALUES ('1','sweetejr777@gmail.com','"
                 + pwd
                 + "', 'ROLE_USER', 'user',next value for hibernate_sequence)");
+        jdbcTemplate.execute("INSERT INTO account (age, email, password, role, username, id) VALUES ('1','sweetejr777@gmail.com','"
+                + pwd
+                + "', 'ROLE_MANAGER', 'manager',next value for hibernate_sequence)");
     }
 
     public static void main(String[] args) {
