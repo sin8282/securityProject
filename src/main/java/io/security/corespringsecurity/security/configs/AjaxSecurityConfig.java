@@ -14,7 +14,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @Order(0)
@@ -42,7 +41,7 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/messages").hasRole("MANAGER")
                 .anyRequest().authenticated()
         .and()
-                .addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
+                //.addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
         ;
         http
                 .exceptionHandling()
@@ -51,6 +50,17 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
         ;
         http.csrf().disable();
 
+        customConfigureAjax(http);
+
+    }
+
+    private void customConfigureAjax(HttpSecurity http) throws Exception {
+        http
+                .apply(new AjaxLoginConfig<>())
+                .successHandlerAjax(ajaxAuthenticationSuccessHandler)
+                .failureHandlerAjax(ajaxAuthenticationFailureHandler)
+                .setAuthenticationManager(authenticationManagerBean())
+                .loginProcessingUrl("/api/login");
     }
 
 
