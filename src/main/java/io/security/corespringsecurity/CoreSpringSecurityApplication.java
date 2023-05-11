@@ -20,13 +20,13 @@ public class CoreSpringSecurityApplication {
     JdbcTemplate jdbcTemplate;
     @PostConstruct
     public void init(){
-        String pwd = passwordEncoder.encode("1");
+/*        String pwd = passwordEncoder.encode("1");
         jdbcTemplate.execute("INSERT INTO account (age, email, password, role, username, id) VALUES ('1','sweetejr777@gmail.com','"
                 + pwd
                 + "', 'ROLE_USER', 'user',next value for hibernate_sequence)");
         jdbcTemplate.execute("INSERT INTO account (age, email, password, role, username, id) VALUES ('1','sweetejr777@gmail.com','"
                 + pwd
-                + "', 'ROLE_MANAGER', 'manager',next value for hibernate_sequence)");
+                + "', 'ROLE_MANAGER', 'manager',next value for hibernate_sequence)");*/
     }
 
     public static void main(String[] args) {

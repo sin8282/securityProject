@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 public class AjaxAuthenticationProvider implements AuthenticationProvider{
     @Autowired
@@ -19,6 +20,7 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider{
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Override
+    @Transactional
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
