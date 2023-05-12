@@ -5,12 +5,14 @@ import io.security.corespringsecurity.domain.dto.ResourceDto;
 import io.security.corespringsecurity.domain.entity.Resource;
 import io.security.corespringsecurity.domain.entity.Role;
 import io.security.corespringsecurity.repository.RoleRepository;
+import io.security.corespringsecurity.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
 import io.security.corespringsecurity.service.ResourceService;
 import io.security.corespringsecurity.service.RoleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +32,9 @@ public class ResourceController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource;
 
     @GetMapping(value="/admin/resources")
     public String getResources(Model model) throws Exception {
@@ -51,6 +56,7 @@ public class ResourceController {
         resources.setRoleSet(roles);
 
         resourceService.createResource(resources);
+        urlFilterInvocationSecurityMetadataSource.reload();
 
         return "redirect:/admin/resources";
     }
@@ -84,11 +90,12 @@ public class ResourceController {
         return "admin/resource/detail";
     }
 
-    @GetMapping(value="/admin/resources/delete/{id}")
+    @DeleteMapping(value="/admin/resources/delete/{id}")
     public String removeResources(@PathVariable String id, Model model) throws Exception {
 
         Resource resources = resourceService.getResource(Long.valueOf(id));
         resourceService.deleteResource(Long.valueOf(id));
+        urlFilterInvocationSecurityMetadataSource.reload();
 
         return "redirect:/admin/resources";
     }
