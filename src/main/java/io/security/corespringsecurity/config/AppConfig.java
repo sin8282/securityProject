@@ -1,7 +1,7 @@
 package io.security.corespringsecurity.config;
 
 import io.security.corespringsecurity.repository.ResourceRepository;
-import io.security.corespringsecurity.service.SecurityResourceService;
+import io.security.corespringsecurity.security.service.SecurityResourceService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -1,11 +1,9 @@
 package io.security.corespringsecurity.security.metadatasource;
 
-import io.security.corespringsecurity.service.SecurityResourceService;
+import io.security.corespringsecurity.security.service.SecurityResourceService;
 import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
