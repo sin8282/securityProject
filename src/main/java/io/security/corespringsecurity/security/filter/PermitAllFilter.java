@@ -45,11 +45,13 @@ public class PermitAllFilter extends FilterSecurityInterceptor {
     }
 
     public void invoke(FilterInvocation fi) throws IOException, ServletException {
-        if (fi.getRequest() != null && fi.getRequest().getAttribute("__spring_security_filterSecurityInterceptor_filterApplied") != null && this.observeOncePerRequest) {
+        if (fi.getRequest() != null
+                && fi.getRequest().getAttribute(FILTER_APPLIED) != null
+                && this.observeOncePerRequest) {
             fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
         } else {
             if (fi.getRequest() != null && this.observeOncePerRequest) {
-                fi.getRequest().setAttribute("__spring_security_filterSecurityInterceptor_filterApplied", Boolean.TRUE);
+                fi.getRequest().setAttribute(FILTER_APPLIED, Boolean.TRUE);
             }
 
             InterceptorStatusToken token = beforeInvocation(fi);

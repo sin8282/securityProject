@@ -25,6 +25,7 @@ import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -43,6 +44,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @Slf4j
 @Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -93,10 +95,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
            .and()
-                .addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class)
+                .addFilterAt(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class)
 
             ;
-
+        http.csrf().disable();
 
     }
 
@@ -122,7 +124,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
         List<AccessDecisionVoter<? extends Object>> accessDecisionVoters = new ArrayList<>();
-        accessDecisionVoters.add(new IpAddressVoter(securityResourceService));
+        //accessDecisionVoters.add(new IpAddressVoter(securityResourceService));
         accessDecisionVoters.add(roleVoter());
         //return Arrays.asList(new RoleVoter());
         return accessDecisionVoters;
