@@ -31,8 +31,36 @@ public class SecurityResourceService {
             List<ConfigAttribute> configAttributes = new ArrayList<>();
             resource.getRoleSet().forEach(role -> {
                 configAttributes.add(new SecurityConfig(role.getRoleName()));
-                result.put(new AntPathRequestMatcher(resource.getResourceName()), configAttributes);
             });
+                result.put(new AntPathRequestMatcher(resource.getResourceName()), configAttributes);
+        });
+
+        return result;
+    }
+
+    public LinkedHashMap<String, List<ConfigAttribute>> getMethodResourceList(){
+        LinkedHashMap<String, List<ConfigAttribute>> result = new LinkedHashMap<>();
+        List<Resource> resourceList = resourceRepository.findAllMethodResources();
+        resourceList.forEach(resource -> {
+            List<ConfigAttribute> configAttributes = new ArrayList<>();
+            resource.getRoleSet().forEach(role -> {
+                configAttributes.add(new SecurityConfig(role.getRoleName()));
+            });
+                result.put(resource.getResourceName(), configAttributes);
+        });
+
+        return result;
+    }
+
+    public LinkedHashMap<String, List<ConfigAttribute>> getPointcutResourceList() {
+        LinkedHashMap<String, List<ConfigAttribute>> result = new LinkedHashMap<>();
+        List<Resource> resourceList = resourceRepository.findAllPointcutResources();
+        resourceList.forEach(resource -> {
+            List<ConfigAttribute> configAttributes = new ArrayList<>();
+            resource.getRoleSet().forEach(role -> {
+                configAttributes.add(new SecurityConfig(role.getRoleName()));
+            });
+            result.put(resource.getResourceName(), configAttributes);
         });
 
         return result;
@@ -42,4 +70,6 @@ public class SecurityResourceService {
         List<String> accessIpList = accessIpRepository.findAll().stream().map(accessIp -> accessIp.getIpAddress()).collect(Collectors.toList());
         return accessIpList;
     }
+
+
 }

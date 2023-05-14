@@ -42,7 +42,7 @@ public class AopSecurityController {
 
     @GetMapping("/pointcutSecured")
     public String pointcutSecured(Model model){
-
+        System.out.println("시작");
         aopPointcutService.notSecured();
         aopPointcutService.pointcutSecured();
         model.addAttribute("method", "Success PointcutSecured");
